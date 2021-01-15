@@ -38,6 +38,14 @@ public class CommandLineInterfaceTest {
     }
 
     @Test
+    void testHelpShort() {
+        int status = commandLineInterface.runWithArguments(new String[] {"-h"});
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        assertEquals(expectedHelpString, output, "Output");
+    }
+
+    @Test
     void testHelpLong() {
         int status = commandLineInterface.runWithArguments(new String[] {"--help"});
         assertEquals(0, status, "status");
