@@ -37,6 +37,9 @@ public class CommandLineInterfaceTest {
         outputStream = null;
     }
 
+    /*
+     * return code 0
+     */
     @Test
     void testHelpShort() {
         int status = commandLineInterface.runWithArguments(new String[] {"-h"});
@@ -45,6 +48,9 @@ public class CommandLineInterfaceTest {
         assertEquals(expectedHelpString, output, "Output");
     }
 
+    /*
+     * return code 0
+     */
     @Test
     void testHelpLong() {
         int status = commandLineInterface.runWithArguments(new String[] {"--help"});
