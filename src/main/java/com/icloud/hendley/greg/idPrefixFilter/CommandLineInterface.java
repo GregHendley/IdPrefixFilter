@@ -25,7 +25,7 @@ public class CommandLineInterface {
      * Unit testing can set this to a print writer
      * so the test can read the command line output.
      *
-     * @param printWriter
+     * @param printWriter the PrintWriter to be used in testing
      */
     void setPrintWriter(PrintWriter printWriter) {
         this.printWriter = printWriter;
@@ -45,7 +45,7 @@ public class CommandLineInterface {
         initializeOptions();
         readCommandLineFromArgs(args);
         configure();
-        if (helpIsNeeded()) {
+        if (helpIsRequested()) {
             printHelp();
         }
         else {
@@ -99,18 +99,22 @@ public class CommandLineInterface {
     }
 
     private void printResults() {
-
+        printWriter.println(resultsOrErrorMessage);
+        if (errorReturnCode()) {
+            printHelp();
+        }
     }
 
     private int returnCode() {
         return this.returnCode;
     }
 
-    private boolean helpIsNeeded() {
-        boolean answer = false;
-        answer = answer || returnCode() != 0;
-        answer = answer || options.hasOption("h");
-        return answer;
+    private boolean errorReturnCode() {
+        return returnCode() != 0;
+    }
+
+    private boolean helpIsRequested() {
+        return commandLine != null && commandLine.hasOption('h');
     }
 
     private void setReturnCodeAndResultsOrErrorMessage(int returnCode, String resultsOrErrorMessage) {

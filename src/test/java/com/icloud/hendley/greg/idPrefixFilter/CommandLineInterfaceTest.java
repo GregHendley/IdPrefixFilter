@@ -53,5 +53,21 @@ public class CommandLineInterfaceTest {
         assertEquals(expectedHelpString, output);
     }
 
+    /*
+     * return code 1
+     */
+    @Test
+    void testBadOptions() {
+        String[] args = "--badOption".split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(1, status, "status");
+        String output = outputStream.toString();
+        String expected = ""
+                + "org.apache.commons.cli.UnrecognizedOptionException: "
+                + "Unrecognized option: --badOption\n"
+                + expectedHelpString;
+        assertEquals(expected, output);
+    }
+
 
 }
