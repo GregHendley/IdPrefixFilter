@@ -1,6 +1,7 @@
 package com.icloud.hendley.greg.idPrefixFilter;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The class SegmentedString represents a delimeted string such as
@@ -52,5 +53,20 @@ public class SegmentedString {
 
     public String[] getSegments() {
         return segments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SegmentedString that = (SegmentedString) o;
+        return Objects.equals(delimeter, that.delimeter) && Arrays.equals(segments, that.segments);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(delimeter);
+        result = 31 * result + Arrays.hashCode(segments);
+        return result;
     }
 }
