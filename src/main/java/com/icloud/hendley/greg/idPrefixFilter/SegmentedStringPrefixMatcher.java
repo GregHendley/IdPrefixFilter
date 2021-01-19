@@ -1,5 +1,6 @@
 package com.icloud.hendley.greg.idPrefixFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +22,10 @@ import java.util.List;
  *    matches {"a" , "b" , "c"} will also match {"a" , "b" }
  */
 public class SegmentedStringPrefixMatcher {
-    //SegmentedStringPrefixMatcherInternalNode root;
+    SegmentedStringPrefixMatcherNodeInternal root;
 
     public SegmentedStringPrefixMatcher() {
-
+        root = new SegmentedStringPrefixMatcherNodeInternal();
     }
 
     /**
@@ -32,7 +33,7 @@ public class SegmentedStringPrefixMatcher {
      * @param prefix a SegmentedString to match as a prefix.
      */
     public void add(SegmentedString prefix) {
-
+        root.add(prefix, 0);
     }
 
     /**
@@ -44,7 +45,7 @@ public class SegmentedStringPrefixMatcher {
      * matches any of this object's prefixes.
      */
     public boolean match(SegmentedString toMatch) {
-        return false;
+        return root.match(toMatch, 0);
     }
 
     /**
@@ -54,7 +55,15 @@ public class SegmentedStringPrefixMatcher {
      * @return list of SegmentedString prefixes
      */
     public List<SegmentedString> getPrefixes() {
-        return null;
+        List<SegmentedString> answer = new ArrayList<>();
+        List<List<String>> prefixesAsListsOfStrings;
+        prefixesAsListsOfStrings = root.prefixesPrefixedWith(new ArrayList<>());
+        String[] emptyStringArray = new String[]{};
+        for (List<String> prefixAsListOfStrings : prefixesAsListsOfStrings) {
+            String[] prefixAsArrayOfStrings = prefixAsListOfStrings.toArray(emptyStringArray);
+            answer.add(new SegmentedString(prefixAsArrayOfStrings));
+        }
+        return answer;
     }
 
 }

@@ -82,4 +82,22 @@ public class SegmentedStringPrefixMatcherTest {
         SegmentedString different = new SegmentedString("a.b.Z");
         assertFalse(matcher.match(different));
     }
+
+    @Test
+    public void testPrefixesPrefixedWithMultiple() {
+        SegmentedString prefix1 = new SegmentedString("a.b");
+        SegmentedString prefix2 = new SegmentedString("a.2.3");
+        SegmentedString prefix3 = new SegmentedString("1.2.3.4.5");
+        matcher.add(prefix1);
+        matcher.add(prefix2);
+        matcher.add(prefix3);
+        List<SegmentedString> actual = matcher.getPrefixes();
+        assertNotNull(actual);
+        assertEquals(3, actual.size());
+        assertTrue(actual.contains(prefix1));
+        assertTrue(actual.contains(prefix2));
+        assertTrue(actual.contains(prefix3));
+    }
+
+
 }

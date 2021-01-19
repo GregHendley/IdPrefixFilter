@@ -15,7 +15,10 @@ import java.util.Objects;
  * An enhancement would be to add comparisons.
  */
 public class SegmentedString {
-    private String delimeter = "\\.";
+    private static final String dot = "\\.";
+    private static final String dotForPrinting = ".";
+    private String delimeter = dot;
+    private String delimeterForPrinting = dotForPrinting;
     private String[] segments;
 
     /**
@@ -32,11 +35,12 @@ public class SegmentedString {
 
     public SegmentedString(String string, String delimeter) {
         this.delimeter = delimeter;
+        delimeterForPrinting = delimeter.equals(dot) ? dotForPrinting : delimeter;
         this.segments = string.split(this.delimeter);
     }
 
     public String toString() {
-        return String.join((CharSequence) Arrays.asList(segments), delimeter);
+        return String.join(delimeterForPrinting, Arrays.asList(getSegments()));
     }
 
     public String get(int index) {

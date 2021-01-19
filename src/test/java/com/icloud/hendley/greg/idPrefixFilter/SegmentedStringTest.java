@@ -41,6 +41,15 @@ public class SegmentedStringTest {
     }
 
     @Test
+    void testAdjacentDelimeters() {
+        segmentedString = new SegmentedString("a--c", "-");
+        String[] actual = segmentedString.getSegments();
+        assertEquals("a", actual[0]);
+        assertEquals("", actual[1]);
+        assertEquals("c", actual[2]);
+    }
+
+    @Test
     void testGetSegmentsNormal() {
         segmentedString = new SegmentedString("a.b.c.d");
         String[] actual = segmentedString.getSegments();
@@ -48,6 +57,14 @@ public class SegmentedStringTest {
         assertEquals("b", actual[1]);
         assertEquals("c", actual[2]);
         assertEquals("d", actual[3]);
+    }
+
+   @Test
+    void testToStringEmpty() {
+        segmentedString = new SegmentedString("a.b.c.d");
+        String expected = "a.b.c.d";
+        String actual = segmentedString.toString();
+        assertEquals(expected, actual);
     }
 
     @Test
