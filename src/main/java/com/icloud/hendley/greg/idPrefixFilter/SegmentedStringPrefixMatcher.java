@@ -57,7 +57,7 @@ public class SegmentedStringPrefixMatcher {
     public List<SegmentedString> getPrefixes() {
         List<SegmentedString> answer = new ArrayList<>();
         List<List<String>> prefixesAsListsOfStrings;
-        prefixesAsListsOfStrings = root.prefixesPrefixedWith(new ArrayList<>());
+        prefixesAsListsOfStrings = root.getPrefixesAsListsOfStrings();
         String[] emptyStringArray = new String[]{};
         for (List<String> prefixAsListOfStrings : prefixesAsListsOfStrings) {
             String[] prefixAsArrayOfStrings = prefixAsListOfStrings.toArray(emptyStringArray);

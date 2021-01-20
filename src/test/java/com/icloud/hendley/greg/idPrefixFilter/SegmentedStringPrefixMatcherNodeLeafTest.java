@@ -79,6 +79,16 @@ public class SegmentedStringPrefixMatcherNodeLeafTest {
     }
 
     @Test
+    public void testGetPrefixesAsListsOfStrings() {
+        List<List<String>> actual = leafNode.getPrefixesAsListsOfStrings();
+        assertNotNull(actual, "not null");
+        assertEquals(1, actual.size(), "size of list");
+        List<String> listOfStrings = actual.get(0);
+        assertNotNull(listOfStrings, "list of strings is not null");
+        assertTrue(listOfStrings.isEmpty(), "list of strings is initially empty");
+    }
+
+    @Test
     public void testPrefixesPrefixedWithAList() {
         List<String> prefixPrefix = Arrays.asList("a", "b", "c");
         List<List<String>> actual = leafNode.prefixesPrefixedWith(prefixPrefix);

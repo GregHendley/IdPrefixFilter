@@ -6,8 +6,8 @@ import java.util.Objects;
 /**
  * The class SegmentedString represents a delimeted string such as
  *   1.2.3.4
- *   one*two*three*four
- *   100->200->300->4
+ *   one-two-three-four
+ *   100and200and300and400
  * The delimeter is usually a single character
  * but can be any string.
  * This class makes it convenient to access segments
@@ -19,42 +19,65 @@ public class SegmentedString {
     private static final String dotForPrinting = ".";
     private String delimeter = dot;
     private String delimeterForPrinting = dotForPrinting;
-    private String[] segments;
+    private final String[] segments;
 
     /**
-     * Constructs an array list with the segments in the array
+     * Constructs a segmented string with the segments in the array
      * @param segments array of segment strings
      */
     public SegmentedString(String[] segments) {
         this.segments = segments;
     }
 
+    /**
+     * Constructs a segmented string from string assuming dots(.) separate segments
+     * @param string a string representation of the segmented string to be created.
+     */
     public SegmentedString(String string) {
         segments = string.split(delimeter);
     }
 
-    public SegmentedString(String string, String delimeter) {
-        this.delimeter = delimeter;
-        delimeterForPrinting = delimeter.equals(dot) ? dotForPrinting : delimeter;
+    /**
+     * Constructs a segmented string from string using delimiter to separate segments.
+     * @param string The string representation of a segmented string
+     * @param delimiter the delimiter separating segments of the string
+     */
+    public SegmentedString(String string, String delimiter) {
+        this.delimeter = delimiter;
+        delimeterForPrinting = delimiter.equals(dot) ? dotForPrinting : delimiter;
         this.segments = string.split(this.delimeter);
     }
 
+    /**
+     * Return a string representation of the segmented string using delimiter
+     * to separate the segments.
+     * @return string representation of the segmented string.
+     */
     public String toString() {
         return String.join(delimeterForPrinting, Arrays.asList(getSegments()));
     }
 
+    /**
+     * Return the segment at index
+     * @param index index of the desired segment
+     * @return the segment at index
+     */
     public String get(int index) {
         return segments[index];
     }
 
+    /**
+     * Return the number of segments.
+     * @return the number of segments.
+     */
     public int length() {
         return segments.length;
     }
 
-    public String getDelimeter() {
-        return delimeter;
-    }
-
+    /**
+     * Return an array of the segments
+     * @return an array of the segments.
+     */
     public String[] getSegments() {
         return segments;
     }

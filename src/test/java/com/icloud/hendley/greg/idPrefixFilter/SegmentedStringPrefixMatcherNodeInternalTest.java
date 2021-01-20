@@ -119,6 +119,32 @@ public class SegmentedStringPrefixMatcherNodeInternalTest {
     }
 
     @Test
+    public void testGetPrefixesAsListsOfStringsSimple() {
+        SegmentedString prefix = new SegmentedString("a.b");
+        internalNode.add(prefix, 0);
+        List<String> prefixPrefix = new ArrayList<>();
+        List<List<String>> actual = internalNode.getPrefixesAsListsOfStrings();
+        assertNotNull(actual);
+        assertEquals(1, actual.size(), "number of elements");
+        List<String> actualElement = actual.get(0);
+        List<String> expectedElement = Arrays.asList("a", "b");
+        assertEquals(expectedElement, actualElement, "element");
+    }
+
+    @Test
+    public void testGetPrefixesAsListsOfStringsRedundant() {
+        addOneCanonicalAndTwoRedundantPrefixes();
+        List<String> prefixPrefix = new ArrayList<>();
+        List<List<String>> actual = internalNode.getPrefixesAsListsOfStrings();
+        assertNotNull(actual);
+        assertEquals(1, actual.size(), "number of elements");
+        List<String> actualElement = actual.get(0);
+        List<String> expectedElement = Arrays.asList("a", "b");
+        assertEquals(expectedElement, actualElement, "element");
+
+    }
+
+    @Test
     public void testPrefixesPrefixedWithSimple() {
         SegmentedString prefix = new SegmentedString("a.b");
         internalNode.add(prefix, 0);

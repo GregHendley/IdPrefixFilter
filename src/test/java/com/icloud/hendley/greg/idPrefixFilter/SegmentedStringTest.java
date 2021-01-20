@@ -11,18 +11,6 @@ public class SegmentedStringTest {
     SegmentedString segmentedString;
 
     @Test
-    void testDelimeterDefaultValue() {
-        segmentedString = new SegmentedString("");
-        assertEquals("\\.", segmentedString.getDelimeter());
-    }
-
-    @Test
-    void testDelimeterPassedInValue() {
-        segmentedString = new SegmentedString("", "-");
-        assertEquals("-", segmentedString.getDelimeter());
-    }
-
-    @Test
     void testLengthNormal() {
         segmentedString = new SegmentedString("a.b.c.d");
         assertEquals(4, segmentedString.length());
@@ -65,6 +53,24 @@ public class SegmentedStringTest {
         String expected = "a.b.c.d";
         String actual = segmentedString.toString();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testToStringDot() {
+        segmentedString = new SegmentedString("a.b.c.d");
+        assertEquals("a.b.c.d", segmentedString.toString());
+    }
+
+    @Test
+    void testToStringDash() {
+        segmentedString = new SegmentedString("a-b-c-d", "-");
+        assertEquals("a-b-c-d", segmentedString.toString());
+    }
+
+    @Test
+    void testToStringWord() {
+        segmentedString = new SegmentedString("1and2and3and4", "and");
+        assertEquals("1and2and3and4", segmentedString.toString());
     }
 
     @Test
