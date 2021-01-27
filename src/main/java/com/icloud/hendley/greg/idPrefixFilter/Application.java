@@ -10,6 +10,7 @@ import com.amihaiemil.eoyaml.Yaml;
 import com.amihaiemil.eoyaml.YamlInput;
 import com.amihaiemil.eoyaml.YamlMapping;
 import com.amihaiemil.eoyaml.YamlSequence;
+import com.icloud.hendley.greg.idPrefixFilter.exceptions.YamlPrefixesFileNameUndefined;
 
 public class Application {
     static public final String SYSTEM_ENV_KEY_YAML_PREFIXES_FILE_NAME
@@ -18,12 +19,12 @@ public class Application {
     private String yamlPrefixesFileName;
     private SegmentedStringPrefixMatcher matcher;
 
-    public Application() throws IOException {
+    public Application() throws IOException, YamlPrefixesFileNameUndefined {
         matcher = new SegmentedStringPrefixMatcher();
         initializePrefixes();
     }
 
-    public Application(String yamlPrefixesFileName) throws IOException {
+    public Application(String yamlPrefixesFileName) throws IOException, YamlPrefixesFileNameUndefined {
         this.yamlPrefixesFileName = yamlPrefixesFileName;
         matcher = new SegmentedStringPrefixMatcher();
         initializePrefixes();
@@ -37,27 +38,35 @@ public class Application {
         return matcher.getPrefixes();
     }
 
-    private void initializePrefixes() throws IOException {
+    private void initializePrefixes() throws IOException, YamlPrefixesFileNameUndefined {
         for (String prefixString : readPrefixStrings()) {
             matcher.add(new SegmentedString(prefixString));
         }
     }
 
-    private List<String> readPrefixStrings() throws IOException {
+    private List<String> readPrefixStrings() throws IOException, YamlPrefixesFileNameUndefined {
         return prefixStringsFromYamlFile(getYamlPrefixesFile());
     }
 
-    private File getYamlPrefixesFile() {
+    private File getYamlPrefixesFile() throws YamlPrefixesFileNameUndefined {
         return new File(getYamlPrefixesFileName());
     }
 
-    private String getYamlPrefixesFileName() {
+    private String getYamlPrefixesFileName() throws YamlPrefixesFileNameUndefined {
+        String answer;
         if (yamlPrefixesFileName != null) {
-            return yamlPrefixesFileName;
+            answer = yamlPrefixesFileName;
         }
         else {
-            return System.getenv(SYSTEM_ENV_KEY_YAML_PREFIXES_FILE_NAME);
+            answer = System.getenv(SYSTEM_ENV_KEY_YAML_PREFIXES_FILE_NAME);
+            if (answer == null) {
+                String message = "The environment variable " +
+                        SYSTEM_ENV_KEY_YAML_PREFIXES_FILE_NAME +
+                        " was not defined.";
+                throw new YamlPrefixesFileNameUndefined(message);
+            }
         }
+        return answer;
     }
 
     private List<String> prefixStringsFromYamlFile(File yamlFile) throws IOException {
