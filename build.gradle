@@ -20,6 +20,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     implementation 'commons-cli:commons-cli:1.4'
+    implementation 'com.amihaiemil.web:eo-yaml:5.1.7'
 }
 
 test {

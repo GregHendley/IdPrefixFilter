@@ -69,14 +69,16 @@ public class SegmentedStringPrefixMatcherTest {
         assertTrue(matcher.match(segmentedString));
     }
 
-    @Test void testMatchFailTooShort() {
+    @Test
+    void testMatchFailTooShort() {
         SegmentedString prefix = new SegmentedString("a.b.c");
         matcher.add(prefix);
         SegmentedString segmentedString = new SegmentedString("a.b");
         assertFalse(matcher.match(segmentedString));
     }
 
-    @Test void testMatchFailSlightlyDifferent() {
+    @Test
+    void testMatchFailSlightlyDifferent() {
         SegmentedString prefix = new SegmentedString("a.b.c");
         matcher.add(prefix);
         SegmentedString different = new SegmentedString("a.b.Z");
@@ -98,6 +100,5 @@ public class SegmentedStringPrefixMatcherTest {
         assertTrue(actual.contains(prefix2));
         assertTrue(actual.contains(prefix3));
     }
-
 
 }
