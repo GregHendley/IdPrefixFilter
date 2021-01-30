@@ -14,11 +14,12 @@ public class CommandLineInterfaceTest {
     static final String expectedHelpString = """
             usage: [-h] [-d] [-y <ymlConfigFileName>] <id-to-filter>
             Echos the id-to-filter and state if it matched.
-            -d,--debug                                log all messages
-            -h,--help                                 print this message
+            -h,--help                                 Print this message.
+            -p,--printPrefixes                        Print the prefixes with redundant 
+                                                      prefixes omitted.
             -y,--ymlConfigFileName <ymlConfigFileName>The name of the YAML file containing
                                                       the list (allowed-id-prefixes:) of
-                                                      allowed ID prefixes
+                                                      allowed ID prefixes.
             """;
 
     CommandLineInterface commandLineInterface;
@@ -75,5 +76,193 @@ public class CommandLineInterfaceTest {
         assertEquals(expected, output);
     }
 
+    /*
+     * return code 2
+     */
+    @Test
+    void testMatchNoYamlConfigFileNameNoSystemEnvVar() {
+        String[] args = "1.2.3.4".split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(12, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "com.icloud.hendley.greg.idPrefixFilter.exceptions.YamlPrefixesFileNameUndefined: " +
+                "The environment variable com.icloud.hendley.greg.idPrefixFilter.yamlPrefixesFileName " +
+                "was not defined.\n" +
+                expectedHelpString;
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 3
+     */
+    @Test
+    void testMatchMisformattedConfigFile() {
+        String argsString = "-y " +
+                "./src/test/resources/misformattedPrefixes.yaml " +
+                "1.2.3.4.5";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(3, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "com.amihaiemil.eoyaml.exceptions.YamlIndentationException: " +
+                "Indentation of line 3 [40.50] is greater than " +
+                "the one of line 2 [- 1.2.3]. " +
+                "It should be less or equal.\n" +
+                expectedHelpString;
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchEmptyListInConfigFile() {
+        String argsString = "-y " +
+                "./src/test/resources/emptyPrefixList.yaml " +
+                "1.2.3.4.5";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "1.2.3.4.5 did not match\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchMissingListInConfigFile() {
+        String argsString = "-y " +
+                "./src/test/resources/missingPrefixList.yaml " +
+                "1.2.3.4.5";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "1.2.3.4.5 did not match\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchSpecifyingYamlConfigFileName() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "1.2.3.4.5";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "1.2.3.4.5 matched\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchTooShort() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "1.2";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "1.2 did not match\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchSlightlyDifferent() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "1.2.c";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "1.2.c did not match\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchExact() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "1.2.3";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "1.2.3 matched\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchNormalFirstPrefix() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "1.2.3.one.april";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "1.2.3.one.april matched\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchNormalSecondPrefix() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "40.50.60.80";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "40.50.60.80 matched\n";
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 0
+     */
+    @Test
+    void testMatchNormalThirdPrefix() {
+        String argsString = "-y " +
+                "./src/test/resources/testPrefixes1.yaml " +
+                "600.100.900";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "600.100.900 matched\n";
+        assertEquals(expected,output);
+    }
 
 }
