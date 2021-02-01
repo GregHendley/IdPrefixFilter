@@ -1,12 +1,5 @@
 package com.icloud.hendley.greg.idPrefixFilter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import com.amihaiemil.eoyaml.Yaml;
 import com.amihaiemil.eoyaml.YamlInput;
 import com.amihaiemil.eoyaml.YamlMapping;
@@ -14,12 +7,18 @@ import com.amihaiemil.eoyaml.YamlSequence;
 import com.amihaiemil.eoyaml.exceptions.YamlIndentationException;
 import com.icloud.hendley.greg.idPrefixFilter.exceptions.YamlPrefixesFileNameUndefined;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 public class Application {
     static public final String SYSTEM_ENV_KEY_YAML_PREFIXES_FILE_NAME
             = "com.icloud.hendley.greg.idPrefixFilter.yamlPrefixesFileName";
 
     private String yamlPrefixesFileName;
-    private SegmentedStringPrefixMatcher matcher;
+    private final SegmentedStringPrefixMatcher matcher;
 
     public Application() throws IOException, YamlPrefixesFileNameUndefined, YamlIndentationException {
         matcher = new SegmentedStringPrefixMatcher();

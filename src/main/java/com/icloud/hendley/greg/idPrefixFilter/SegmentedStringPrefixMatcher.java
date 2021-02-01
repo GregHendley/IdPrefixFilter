@@ -22,7 +22,7 @@ import java.util.List;
  *    matches {"a" , "b" , "c"} will also match {"a" , "b" }
  */
 public class SegmentedStringPrefixMatcher {
-    SegmentedStringPrefixMatcherNodeInternal root;
+    final SegmentedStringPrefixMatcherNodeInternal root;
 
     public SegmentedStringPrefixMatcher() {
         root = new SegmentedStringPrefixMatcherNodeInternal();

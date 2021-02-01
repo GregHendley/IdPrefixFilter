@@ -1,10 +1,8 @@
 package com.icloud.hendley.greg.idPrefixFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SegmentedStringTest {
 
@@ -23,13 +21,13 @@ public class SegmentedStringTest {
     }
 
     @Test
-    void testLengthStringWithNoDelimeter() {
+    void testLengthStringWithNoDelimiter() {
         segmentedString = new SegmentedString("justOneSegment");
         assertEquals(1, segmentedString.length());
     }
 
     @Test
-    void testAdjacentDelimeters() {
+    void testAdjacentDelimiters() {
         segmentedString = new SegmentedString("a--c", "-");
         String[] actual = segmentedString.getSegments();
         assertEquals("a", actual[0]);
@@ -81,14 +79,14 @@ public class SegmentedStringTest {
     }
 
     @Test
-    void testGetSegmentsStringWithNoDelimeter() {
+    void testGetSegmentsStringWithNoDelimiter() {
         segmentedString = new SegmentedString("justOneSegment");
         String[] actual = segmentedString.getSegments();
         assertEquals("justOneSegment", actual[0]);
     }
 
     @Test
-    void testGetSegmentsAlternateDelimeter() {
+    void testGetSegmentsAlternateDelimiter() {
         segmentedString = new SegmentedString("a-b-c", "-");
         String[] actual = segmentedString.getSegments();
         assertEquals("a", actual[0]);

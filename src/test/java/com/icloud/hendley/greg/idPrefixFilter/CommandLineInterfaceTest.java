@@ -265,4 +265,91 @@ public class CommandLineInterfaceTest {
         assertEquals(expected,output);
     }
 
+    @Test
+    void testPrintPrefixesEmpty() {
+        String argsString = "-p " +
+                "-y " +
+                "./src/test/resources/emptyPrefixList.yaml ";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String expected = "\n";
+        assertEquals(expected, outputStream.toString());
+    }
+
+    @Test
+    void testPrintPrefixesMissing() {
+        String argsString = "-p " +
+                "-y " +
+                "./src/test/resources/missingPrefixList.yaml ";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String expected = "\n";
+        assertEquals(expected, outputStream.toString());
+    }
+
+    @Test
+    void testPrintPrefixesNoYamlConfigFileNameNoSystemEnvVar() {
+        String argsString = "-p ";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(12, status, "status");
+        String expected = "com.icloud.hendley.greg.idPrefixFilter.exceptions.YamlPrefixesFileNameUndefined: " +
+                "The environment variable com.icloud.hendley.greg.idPrefixFilter.yamlPrefixesFileName " +
+                "was not defined.\n" +
+                expectedHelpString;
+        assertEquals(expected, outputStream.toString());
+    }
+
+    /*
+     * return code 3
+     */
+    @Test
+    void testPrintPrefixesMisformatted() {
+        String argsString = "-p " +
+                "-y " +
+                "./src/test/resources/misformattedPrefixes.yaml ";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(3, status, "status");
+        String expected = "com.amihaiemil.eoyaml.exceptions.YamlIndentationException: " +
+                "Indentation of line 3 [40.50] is greater than the one of line 2 [- 1.2.3]. " +
+                "It should be less or equal.\n" +
+                expectedHelpString;
+        assertEquals(expected, outputStream.toString());
+    }
+
+    @Test
+    void testPrintPrefixesNormal() {
+        String argsString = "-p " +
+                "-y " +
+                "./src/test/resources/testPrefixes1.yaml ";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String expected = """
+                1.2.3
+                40.50
+                600
+
+                """;
+        assertEquals(expected, outputStream.toString());
+    }
+
+    @Test
+    void testPrintPrefixesRedundant() {
+        String argsString = "-p " +
+                "-y " +
+                "./src/test/resources/redundantPrefixes.yaml ";
+        String[] args = argsString.split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(0, status, "status");
+        String expected = """
+                1.2.3
+
+                """;
+        assertEquals(expected, outputStream.toString());
+    }
+
 }

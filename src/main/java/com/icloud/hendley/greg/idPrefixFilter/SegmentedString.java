@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * The class SegmentedString represents a delimeted string such as
+ * The class SegmentedString represents a delimited string such as
  *   1.2.3.4
  *   one-two-three-four
  *   100and200and300and400
- * The delimeter is usually a single character
+ * The delimiter is usually a single character
  * but can be any string.
  * This class makes it convenient to access segments
  * and still answer the segmented string as a string.
@@ -17,8 +17,8 @@ import java.util.Objects;
 public class SegmentedString {
     private static final String dot = "\\.";
     private static final String dotForPrinting = ".";
-    private String delimeter = dot;
-    private String delimeterForPrinting = dotForPrinting;
+    private String delimiter = dot;
+    private String delimiterForPrinting = dotForPrinting;
     private final String[] segments;
 
     /**
@@ -34,7 +34,7 @@ public class SegmentedString {
      * @param string a string representation of the segmented string to be created.
      */
     public SegmentedString(String string) {
-        segments = string.split(delimeter);
+        segments = string.split(delimiter);
     }
 
     /**
@@ -43,9 +43,9 @@ public class SegmentedString {
      * @param delimiter the delimiter separating segments of the string
      */
     public SegmentedString(String string, String delimiter) {
-        this.delimeter = delimiter;
-        delimeterForPrinting = delimiter.equals(dot) ? dotForPrinting : delimiter;
-        this.segments = string.split(this.delimeter);
+        this.delimiter = delimiter;
+        delimiterForPrinting = delimiter.equals(dot) ? dotForPrinting : delimiter;
+        this.segments = string.split(this.delimiter);
     }
 
     /**
@@ -54,7 +54,7 @@ public class SegmentedString {
      * @return string representation of the segmented string.
      */
     public String toString() {
-        return String.join(delimeterForPrinting, Arrays.asList(getSegments()));
+        return String.join(delimiterForPrinting, Arrays.asList(getSegments()));
     }
 
     /**
@@ -87,12 +87,12 @@ public class SegmentedString {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SegmentedString that = (SegmentedString) o;
-        return Objects.equals(delimeter, that.delimeter) && Arrays.equals(segments, that.segments);
+        return Objects.equals(delimiter, that.delimiter) && Arrays.equals(segments, that.segments);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(delimeter);
+        int result = Objects.hash(delimiter);
         result = 31 * result + Arrays.hashCode(segments);
         return result;
     }

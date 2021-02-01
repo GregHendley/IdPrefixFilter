@@ -45,7 +45,7 @@ import java.util.TreeMap;
  */
 public class SegmentedStringPrefixMatcherNodeInternal implements SegmentedStringPrefixMatcherNode {
 
-    private TreeMap<String, SegmentedStringPrefixMatcherNode> nodes;
+    private final TreeMap<String, SegmentedStringPrefixMatcherNode> nodes;
 
     public SegmentedStringPrefixMatcherNodeInternal() {
         nodes = new TreeMap<>();

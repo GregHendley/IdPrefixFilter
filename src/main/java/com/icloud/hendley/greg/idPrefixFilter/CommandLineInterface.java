@@ -7,7 +7,6 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class CommandLineInterface {
     Options options;
@@ -15,7 +14,7 @@ public class CommandLineInterface {
     PrintWriter printWriter; //Allows unit test to read output.
     int returnCode = 0;
     String resultsOrErrorMessage = "";
-    private boolean matched;
+    private Application application;
 
     public static void main(String[] args) {
         CommandLineInterface instance = new CommandLineInterface();
@@ -57,7 +56,15 @@ public class CommandLineInterface {
             if (helpIsRequested()) {
                 printHelp();
             } else {
-                run();
+                configure();
+                if (returnCode == 0) {
+                    if (printPrefixesIsRequested()) {
+                        putPrefixesIntoResults();
+                    }
+                    else {
+                        match();
+                    }
+                }
                 printResults();
             }
         }
@@ -99,31 +106,43 @@ public class CommandLineInterface {
         }
     }
 
-    private void run() {
-        Application application = getInitializedApplication();
-        if (application != null && returnCode == 0) {
-            SegmentedString idToFilter = getIdToFilter();
-            boolean matched = application.match(idToFilter);
-            String results = idToFilter.toString() + " ";
-            results += matched ? "matched" : "did not match";
-            setReturnCodeAndResultsOrErrorMessage(0, results);
-        }
+    private void configure() {
+        initializeApplication();
     }
 
-    private Application getInitializedApplication() {
-        Application application = null;
+    private boolean printPrefixesIsRequested() {
+        return commandLine.hasOption('p');
+    }
+
+    private void putPrefixesIntoResults() {
+        List<SegmentedString> prefixes = application.getPrefixes();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (SegmentedString prefix : prefixes) {
+            stringBuilder.append(prefix);
+            stringBuilder.append('\n');
+        }
+        setReturnCodeAndResultsOrErrorMessage(0, stringBuilder.toString());
+    }
+
+    private void match() {
+        SegmentedString idToFilter = getIdToFilter();
+        boolean matched = application.match(idToFilter);
+        String results = idToFilter.toString() + " ";
+        results += matched ? "matched" : "did not match";
+        setReturnCodeAndResultsOrErrorMessage(0, results);
+    }
+
+    private void initializeApplication() {
         if (isYamlConfigFileNameSpecified()) {
             String fileName = getYamlConfigFileName();
-            application = getApplicationWithYamlConfigFileName(fileName);
+            initializeApplicationWithYamlConfigFileName(fileName);
         }
         else {
-            application = getApplicationAssumingSystemEnvSpecifiesYamlConfigFileName();
+            initializeApplicationAssumingSystemEnvSpecifiesYamlConfigFileName();
         }
-        return application;
     }
 
-    private Application getApplicationWithYamlConfigFileName(String yamlConfigFileName) {
-        Application application = null;
+    private void initializeApplicationWithYamlConfigFileName(String yamlConfigFileName) {
         try {
             application = new Application(yamlConfigFileName);
         } catch (IOException ioException) {
@@ -142,11 +161,9 @@ public class CommandLineInterface {
                     yamlIndentationException.toString()
             );
         }
-        return application;
     }
 
-    private Application getApplicationAssumingSystemEnvSpecifiesYamlConfigFileName() {
-        Application application = null;
+    private void initializeApplicationAssumingSystemEnvSpecifiesYamlConfigFileName() {
         try {
             application = new Application();
         } catch (IOException ioE) {
@@ -160,7 +177,6 @@ public class CommandLineInterface {
                     yE.toString()
             );
         }
-        return application;
     }
 
     private SegmentedString getIdToFilter() {

@@ -65,7 +65,7 @@ public class SegmentedStringPrefixMatcherNodeInternalTest {
     }
 
     @Test
-    public void testMatchNormalInputOnePrefixIndiciesMismatched() {
+    public void testMatchNormalInputOnePrefixIndicesMismatched() {
         SegmentedString prefix = new SegmentedString("a.b");
         internalNode.add(prefix, 0);
         SegmentedString input = new SegmentedString("a.b.c");
@@ -73,7 +73,7 @@ public class SegmentedStringPrefixMatcherNodeInternalTest {
     }
 
     @Test
-    public void testMatchNormalInputOnePrefixIndiciesReverseMismatched() {
+    public void testMatchNormalInputOnePrefixIndicesReverseMismatched() {
         SegmentedString prefix = new SegmentedString("a.b");
         internalNode.add(prefix, 1);
         SegmentedString input = new SegmentedString("a.b.c");
@@ -122,7 +122,6 @@ public class SegmentedStringPrefixMatcherNodeInternalTest {
     public void testGetPrefixesAsListsOfStringsSimple() {
         SegmentedString prefix = new SegmentedString("a.b");
         internalNode.add(prefix, 0);
-        List<String> prefixPrefix = new ArrayList<>();
         List<List<String>> actual = internalNode.getPrefixesAsListsOfStrings();
         assertNotNull(actual);
         assertEquals(1, actual.size(), "number of elements");
@@ -134,7 +133,6 @@ public class SegmentedStringPrefixMatcherNodeInternalTest {
     @Test
     public void testGetPrefixesAsListsOfStringsRedundant() {
         addOneCanonicalAndTwoRedundantPrefixes();
-        List<String> prefixPrefix = new ArrayList<>();
         List<List<String>> actual = internalNode.getPrefixesAsListsOfStrings();
         assertNotNull(actual);
         assertEquals(1, actual.size(), "number of elements");
