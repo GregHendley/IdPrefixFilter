@@ -7,7 +7,7 @@ import java.util.List;
  * SegmentedStringPrefixMatcher holds a collection
  * of prefixes of instances of SegmentedString
  * and answers if an input SegmentedString
- * matches any in the collection.
+ * begins with (matches) any prefixes in the collection.
  *
  * To use, create an instance and add prefixes to match
  * as segmented strings. These are your patterns (without wild cards).
@@ -24,6 +24,9 @@ import java.util.List;
 public class SegmentedStringPrefixMatcher {
     final SegmentedStringPrefixMatcherNodeInternal root;
 
+    /**
+     * Create a new instance of SegmentedStringPrefixMatcher
+     */
     public SegmentedStringPrefixMatcher() {
         root = new SegmentedStringPrefixMatcherNodeInternal();
     }

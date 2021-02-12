@@ -20,6 +20,10 @@ import java.util.List;
 public class SegmentedStringPrefixMatcherNodeLeaf implements SegmentedStringPrefixMatcherNode{
     private static SegmentedStringPrefixMatcherNodeLeaf singleton;
 
+    /**
+     * Answer the single instance of SegmentedStringPrefixMatcherNodeLeaf
+     * @return the single instance of SegmentedStringPrefixMatcherNodeLeaf
+     */
     public static SegmentedStringPrefixMatcherNodeLeaf singleton() {
         if (singleton == null) {
             singleton = new SegmentedStringPrefixMatcherNodeLeaf();

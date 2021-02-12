@@ -3,7 +3,7 @@ package com.icloud.hendley.greg.idPrefixFilter;
 import java.util.List;
 
 /**
- * Implementors of SegmentedStringPrefixMatcherNode both represent
+ * Implementors of SegmentedStringPrefixMatcherNode represent
  * a compact representation of a set of segmented strings
  * and recursive algorithms for adding segmented strings,
  * matching these segmented strings as prefixes to input

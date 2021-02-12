@@ -13,7 +13,9 @@ public class CommandLineInterfaceTest {
 
     static final String expectedHelpString = """
             usage: [-h] [-d] [-y <ymlConfigFileName>] <id-to-filter>
-            Echos the id-to-filter and state if it matched.
+            Echos the id-to-filter followed on the same line by either of:
+                matched
+                does not match
             -h,--help                                 Print this message.
             -p,--printPrefixes                        Print the prefixes with redundant 
                                                       prefixes omitted.
@@ -78,22 +80,14 @@ public class CommandLineInterfaceTest {
 
     /*
      * return code 2
+     *
+     * This can be tested in a container where the
+     * prefixes file is made unreadable.
+     * See rc2YamlPrefixesFileNameUndefined.dockerfile
+     * and its comments.
      */
-    @Test
-    void testMatchNoYamlConfigFileNameNoSystemEnvVar() {
-        String[] args = "1.2.3.4".split(" ");
-        int status = commandLineInterface.runWithArguments(args);
-        assertEquals(12, status, "status");
-        String output = outputStream.toString();
-        String expected = "" +
-                "com.icloud.hendley.greg.idPrefixFilter.exceptions.YamlPrefixesFileNameUndefined: " +
-                "The environment variable com.icloud.hendley.greg.idPrefixFilter.yamlPrefixesFileName " +
-                "was not defined.\n" +
-                expectedHelpString;
-        assertEquals(expected,output);
-    }
 
-    /*
+     /*
      * return code 3
      */
     @Test
@@ -110,6 +104,33 @@ public class CommandLineInterfaceTest {
                 "Indentation of line 3 [40.50] is greater than " +
                 "the one of line 2 [- 1.2.3]. " +
                 "It should be less or equal.\n" +
+                expectedHelpString;
+        assertEquals(expected,output);
+    }
+
+    /*
+     * return code 11
+     *
+     * See rc2YamlPrefixesFileNameUndefined.dockerfile
+     * and its comments for how to test.
+     *
+     * See onlyCommandLineSpecifiesPrefixes.dockerfile
+     * for a contrast.
+     */
+
+    /*
+     * return code 12
+     */
+    @Test
+    void testMatchNoYamlConfigFileNameNoSystemEnvVar() {
+        String[] args = "1.2.3.4".split(" ");
+        int status = commandLineInterface.runWithArguments(args);
+        assertEquals(12, status, "status");
+        String output = outputStream.toString();
+        String expected = "" +
+                "com.icloud.hendley.greg.idPrefixFilter.exceptions.YamlPrefixesFileNameUndefined: " +
+                "The environment variable com.icloud.hendley.greg.idPrefixFilter.yamlPrefixesFileName " +
+                "was not defined.\n" +
                 expectedHelpString;
         assertEquals(expected,output);
     }
@@ -289,6 +310,9 @@ public class CommandLineInterfaceTest {
         assertEquals(expected, outputStream.toString());
     }
 
+    /**
+     * return code 12
+     */
     @Test
     void testPrintPrefixesNoYamlConfigFileNameNoSystemEnvVar() {
         String argsString = "-p ";

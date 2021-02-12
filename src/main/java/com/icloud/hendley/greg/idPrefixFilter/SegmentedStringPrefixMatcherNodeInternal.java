@@ -47,6 +47,9 @@ public class SegmentedStringPrefixMatcherNodeInternal implements SegmentedString
 
     private final TreeMap<String, SegmentedStringPrefixMatcherNode> nodes;
 
+    /**
+     * Create a new instance of SegmentedStringPrefixMatcherNodeInternal
+     */
     public SegmentedStringPrefixMatcherNodeInternal() {
         nodes = new TreeMap<>();
     }
